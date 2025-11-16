@@ -12,26 +12,26 @@
             <a href="{% url 'cards_list' %}" class="text-lg font-semibold text-slate-800">
                 PayMind
             </a>
-            <nav class="flex items-center gap-4 text-sm">
-                {% if user.is_authenticated %}
-                    <span class="text-slate-600">
-                        Hola, <span class="font-medium">{{ user.username }}</span>
-                    </span>
-                    <a href="{% url 'cards_list' %}" class="text-slate-600 hover:text-slate-900">
-                        Mis tarjetas
-                    </a>
-                    <a href="{% url 'logout' %}" class="text-red-500 hover:text-red-600 font-medium">
-                        Cerrar sesión
-                    </a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="text-slate-600 hover:text-slate-900">
-                        Iniciar sesión
-                    </a>
-                    <a href="{% url 'signup' %}" class="text-indigo-600 hover:text-indigo-700 font-medium">
-                        Registrarse
-                    </a>
-                {% endif %}
-            </nav>
+                <nav class="flex items-center gap-4 text-sm">
+                    {% if user.is_authenticated %}
+                        <span class="text-slate-600">
+                            Hola, <span class="font-medium">{{ user.username }}</span>
+                        </span>
+                        <a href="{% url 'cards_list' %}" class="text-slate-600 hover:text-slate-900">
+                            Dashboard
+                        </a>
+                        <a href="{% url 'logout' %}" class="text-red-500 hover:text-red-600 font-medium">
+                            Cerrar sesión
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-slate-600 hover:text-slate-900">
+                            Iniciar sesión
+                        </a>
+                        <a href="{% url 'signup' %}" class="text-indigo-600 hover:text-indigo-700 font-medium">
+                            Registrarse
+                        </a>
+                    {% endif %}
+                </nav>
         </div>
     </header>
 
