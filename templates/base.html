@@ -2,24 +2,42 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayMind</title>
+    <!-- Tailwind CDN para el MVP -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<nav>
-    {% if user.is_authenticated %}
-        <span>Hola, {{ user.username }}</span>
-        <a href="{% url 'cards_list' %}">Mis tarjetas</a>
-        <a href="{% url 'logout' %}">Cerrar sesión</a>
-    {% else %}
-        <a href="{% url 'login' %}">Iniciar sesión</a>
-        <a href="{% url 'signup' %}">Registrarse</a>
-    {% endif %}
-    <hr>
-</nav>
+<body class="bg-slate-100 min-h-screen">
+    <header class="bg-white shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="{% url 'cards_list' %}" class="text-lg font-semibold text-slate-800">
+                PayMind
+            </a>
+            <nav class="flex items-center gap-4 text-sm">
+                {% if user.is_authenticated %}
+                    <span class="text-slate-600">
+                        Hola, <span class="font-medium">{{ user.username }}</span>
+                    </span>
+                    <a href="{% url 'cards_list' %}" class="text-slate-600 hover:text-slate-900">
+                        Mis tarjetas
+                    </a>
+                    <a href="{% url 'logout' %}" class="text-red-500 hover:text-red-600 font-medium">
+                        Cerrar sesión
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-slate-600 hover:text-slate-900">
+                        Iniciar sesión
+                    </a>
+                    <a href="{% url 'signup' %}" class="text-indigo-600 hover:text-indigo-700 font-medium">
+                        Registrarse
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
 
-
-    {% block content %}
-    {% endblock %}
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        {% block content %}
+        {% endblock %}
+    </main>
 </body>
 </html>

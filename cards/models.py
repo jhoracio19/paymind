@@ -41,6 +41,17 @@ class Card(models.Model):
                 fecha = date(hoy.year, hoy.month + 1, self.fecha_limite_pago)
 
         return fecha
+    
+    def proxima_fecha_corte_real(self):
+        hoy = date.today()
+        fecha = date(hoy.year, hoy.month, self.fecha_corte)
+        if fecha < hoy:
+            if hoy.month == 12:
+                fecha = date(hoy.year + 1, 1, self.fecha_corte)
+            else:
+                fecha = date(hoy.year, hoy.month + 1, self.fecha_corte)
+        return fecha
+
 
     def __str__(self):
         return f"{self.banco} - {self.nombre}"

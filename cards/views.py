@@ -9,9 +9,46 @@ from .forms import CardForm
 
 @login_required
 def cards_list(request):
-    cards = Card.objects.filter(user=request.user)
-    cards = sorted(cards, key=lambda c: c.proxima_fecha_limite_real())
-    return render(request, 'cards/cards_list.html', {'cards': cards})
+    cards_qs = Card.objects.filter(user=request.user)
+
+    # Lista ordenada por urgencia (fecha límite real más cercana)
+    cards = sorted(cards_qs, key=lambda c: c.proxima_fecha_limite_real())
+
+    # Próxima tarjeta a pagar
+    next_to_pay = cards[0] if cards else None
+
+    # Tarjeta recomendada para usar hoy (la que tiene el corte más lejano)
+    recommended_card = None
+    if cards_qs:
+        recommended_card = sorted(
+            cards_qs,
+            key=lambda c: c.proxima_fecha_corte_real(),
+            reverse=True
+        )[0]
+
+    # Calendario simple: lista de eventos (corte / pago)
+    eventos = []
+    for card in cards_qs:
+        eventos.append({
+            'fecha': card.proxima_fecha_corte_real(),
+            'tipo': 'Corte',
+            'card': card,
+        })
+        eventos.append({
+            'fecha': card.proxima_fecha_limite_real(),
+            'tipo': 'Pago',
+            'card': card,
+        })
+
+    eventos = sorted(eventos, key=lambda e: e['fecha'])
+
+    context = {
+        'cards': cards,
+        'next_to_pay': next_to_pay,
+        'recommended_card': recommended_card,
+        'eventos': eventos,
+    }
+    return render(request, 'cards/cards_list.html', context)
 
 
 @login_required
