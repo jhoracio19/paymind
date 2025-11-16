@@ -1,13 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ title }}</h1>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-</form>
+<div class="max-w-xl mx-auto">
 
-<a href="{% url 'cards_list' %}">Volver</a>
+    <h1 class="text-2xl font-bold text-slate-800 mb-6">
+        {{ title }}
+    </h1>
+
+    <form method="post" class="space-y-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        {% csrf_token %}
+
+{% for field in form %}
+    <div class="space-y-1">
+        <label class="block text-sm font-medium text-slate-700">
+            {{ field.label }}
+        </label>
+        {{ field }}
+        {% if field.help_text %}
+            <p class="text-xs text-slate-400">{{ field.help_text }}</p>
+        {% endif %}
+        {% if field.errors %}
+            <p class="text-xs text-red-500">
+                {{ field.errors }}
+            </p>
+        {% endif %}
+    </div>
+{% endfor %}
+        <div class="flex items-center justify-end gap-3 pt-4">
+            <a href="{% url 'cards_list' %}"
+               class="px-4 py-2 rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 text-sm">
+                Cancelar
+            </a>
+
+            <button type="submit"
+                    class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm">
+                Guardar
+            </button>
+        </div>
+    </form>
+
+</div>
+
 {% endblock %}

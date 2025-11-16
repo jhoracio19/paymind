@@ -12,125 +12,161 @@
 
 {% if cards %}
 
-    <!-- Resumen principal -->
-    <div class="grid gap-4 md:grid-cols-2 mb-6">
+<!-- Resumen principal -->
+<div class="grid gap-4 grid-cols-1 md:grid-cols-2 mb-8">
 
-        <!-- Próxima tarjeta a pagar -->
-        <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100">
-            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">
+    <!-- Próxima tarjeta -->
+    <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="bg-indigo-100 text-indigo-600 p-2 rounded-lg">
+                <i data-feather="alert-circle" class="w-5 h-5"></i>
+            </div>
+            <h2 class="text-sm font-semibold text-slate-600 uppercase tracking-wide">
                 Próxima tarjeta a pagar
             </h2>
-            {% if next_to_pay %}
-                <div>
-                    <p class="text-lg font-semibold" style="color: {{ next_to_pay.color }}">
-                        {{ next_to_pay.banco }} – {{ next_to_pay.nombre }}
-                    </p>
-                    <p class="text-sm text-slate-600 mt-1">
-                        Fecha límite real:
-                        <span class="font-semibold">
-                            {{ next_to_pay.proxima_fecha_limite_real }}
-                        </span>
-                    </p>
-                    <p class="text-sm text-slate-600">
-                        Saldo: <span class="font-semibold">${{ next_to_pay.saldo_actual }}</span>
-                    </p>
-                </div>
-            {% else %}
-                <p class="text-sm text-slate-500">No hay tarjetas registradas.</p>
-            {% endif %}
         </div>
 
-        <!-- Tarjeta recomendada para usar hoy -->
-        <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100">
-            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">
+        {% if next_to_pay %}
+        <div>
+            <p class="text-lg font-semibold" style="color: {{ next_to_pay.color }}">
+                {{ next_to_pay.banco }} – {{ next_to_pay.nombre }}
+            </p>
+            <p class="text-sm text-slate-600 mt-1">
+                Fecha límite real:  
+                <span class="font-semibold">
+                    {{ next_to_pay.proxima_fecha_limite_real|date:"j \\d\\e F \\d\\e Y" }}
+                </span>
+            </p>
+            <p class="text-sm text-slate-600">
+                Saldo: <span class="font-semibold">${{ next_to_pay.saldo_actual }}</span>
+            </p>
+        </div>
+        {% else %}
+            <p class="text-sm text-slate-500">No hay tarjetas registradas.</p>
+        {% endif %}
+    </div>
+
+    <!-- Tarjeta recomendada -->
+    <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="bg-green-100 text-green-600 p-2 rounded-lg">
+                <i data-feather="thumbs-up" class="w-5 h-5"></i>
+            </div>
+            <h2 class="text-sm font-semibold text-slate-600 uppercase tracking-wide">
                 Tarjeta recomendada para usar hoy
             </h2>
-            {% if recommended_card %}
-                <div>
-                    <p class="text-lg font-semibold" style="color: {{ recommended_card.color }}">
-                        {{ recommended_card.banco }} – {{ recommended_card.nombre }}
-                    </p>
-                    <p class="text-sm text-slate-600 mt-1">
-                        Próxima fecha de corte:
-                        <span class="font-semibold">
-                            {{ recommended_card.proxima_fecha_corte_real|date:"j \\d\\e F \\d\\e Y" }}
-                        </span>
-                    </p>
-                    <p class="text-sm text-slate-600">
-                        Límite: <span class="font-semibold">${{ recommended_card.limite_credito }}</span>
-                    </p>
-                </div>
-            {% else %}
-                <p class="text-sm text-slate-500">Agrega al menos una tarjeta para ver la recomendación.</p>
-            {% endif %}
         </div>
+
+        {% if recommended_card %}
+        <div>
+            <p class="text-lg font-semibold" style="color: {{ recommended_card.color }}">
+                {{ recommended_card.banco }} – {{ recommended_card.nombre }}
+            </p>
+            <p class="text-sm text-slate-600 mt-1">
+                Próxima fecha de corte:  
+                <span class="font-semibold">
+                    {{ recommended_card.proxima_fecha_corte_real|date:"j \\d\\e F \\d\\e Y" }}
+                </span>
+            </p>
+            <p class="text-sm text-slate-600">
+                Límite: <span class="font-semibold">${{ recommended_card.limite_credito }}</span>
+            </p>
+        </div>
+        {% else %}
+            <p class="text-sm text-slate-500">Agrega una tarjeta para ver la recomendación.</p>
+        {% endif %}
+    </div>
+
+</div>
 
     </div>
 
     <!-- Lista de tarjetas -->
-    <section class="mb-6">
-        <h2 class="text-lg font-semibold text-slate-800 mb-3">Todas tus tarjetas (ordenadas por urgencia)</h2>
+    <div class="space-y-3">
+        {% for card in cards %}
+            <div class="bg-white rounded-xl border border-slate-200 p-3 md:p-4 flex flex-col gap-3 shadow-sm">
 
-        <div class="space-y-3">
-            {% for card in cards %}
-                <div class="bg-white rounded-xl border border-slate-100 p-4 flex flex-col gap-2">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="font-semibold text-slate-800" style="color: {{ card.color }}">
+                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+
+                    <!-- Info principal -->
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-6 rounded-full" style="background-color: {{ card.color }}"></div>
+                            <p class="font-semibold text-slate-800">
                                 {{ card.banco }} – {{ card.nombre }}
                             </p>
-                            <p class="text-xs text-slate-500">
-                                Fecha real límite: {{ card.proxima_fecha_limite_real|date:"j \\d\\e F \\d\\e Y" }}
-                            </p>
                         </div>
-                        <div class="text-right text-sm text-slate-600">
-                            <p>Límite: <span class="font-semibold">${{ card.limite_credito }}</span></p>
-                            <p>Saldo: <span class="font-semibold">${{ card.saldo_actual }}</span></p>
+
+                        <p class="text-xs text-slate-500">
+                            Fecha real límite:
+                            {{ card.proxima_fecha_limite_real|date:"j \\d\\e F \\d\\e Y" }}
+                        </p>
+
+                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+                            <span>Corte: día {{ card.fecha_corte }}</span>
+                            <span>Pago límite: día {{ card.fecha_limite_pago }}</span>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between text-xs text-slate-500">
-                        <p>Corte: día {{ card.fecha_corte }}</p>
-                        <p>Pago límite: día {{ card.fecha_limite_pago }}</p>
-                    </div>
-                    <div class="text-right text-sm">
-                        <a href="{% url 'card_update' card.pk %}"
-                           class="text-indigo-600 hover:text-indigo-700 mr-2">
-                            Editar
-                        </a>
-                        <a href="{% url 'card_delete' card.pk %}"
-                           class="text-red-500 hover:text-red-600">
-                            Eliminar
-                        </a>
+
+                    <!-- Importes -->
+                    <div class="text-sm text-slate-700 md:text-right">
+                        <p>
+                            Límite:
+                            <span class="font-semibold">
+                                ${{ card.limite_credito }}
+                            </span>
+                        </p>
+                        <p>
+                            Saldo:
+                            <span class="font-semibold {% if card.saldo_actual > 0 %}text-red-500{% endif %}">
+                                ${{ card.saldo_actual }}
+                            </span>
+                        </p>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
-    </section>
+
+                <!-- Acciones -->
+                <div class="flex items-center justify-end gap-3 text-sm">
+                    <a href="{% url 'card_update' card.pk %}"
+                       class="text-indigo-600 hover:text-indigo-700">
+                        Editar
+                    </a>
+                    <a href="{% url 'card_delete' card.pk %}"
+                       class="text-red-500 hover:text-red-600">
+                        Eliminar
+                    </a>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+
 
     <!-- Calendario simple -->
     <section>
-        <h2 class="text-lg font-semibold text-slate-800 mb-3">Calendario de cortes y pagos</h2>
+    <h2 class="text-lg font-semibold text-slate-800 mb-3">Calendario de cortes y pagos</h2>
 
-        {% if eventos %}
-            <div class="bg-white rounded-xl border border-slate-100 p-4">
-                <ul class="space-y-2 text-sm">
-                    {% for e in eventos %}
-                        <li class="flex items-center justify-between">
-                            <span class="font-semibold">
-                                {{ e.fecha|date:"j \\d\\e F \\d\\e Y" }}
-                            </span>
-                            · {{ e.tipo }} ·
-                            {{ e.card.banco }} – {{ e.card.nombre }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% else %}
-            <p class="text-sm text-slate-500">
-                Aún no hay fechas porque no tienes tarjetas registradas.
-            </p>
-        {% endif %}
-    </section>
+    {% if eventos %}
+        <div class="bg-white rounded-xl border border-slate-200 p-3 md:p-4 shadow-sm">
+            <ul class="space-y-1 text-sm md:space-y-2">
+                {% for e in eventos %}
+                    <li class="flex items-center justify-between">
+                        <span class="font-medium text-slate-700">
+                            {{ e.fecha|date:"j \\d\\e F \\d\\e Y" }}
+                        </span>
+                        <span class="text-slate-600">
+                            · {{ e.tipo }} – 
+                            <span class="font-semibold">{{ e.card.banco }}</span>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p class="text-sm text-slate-500">No hay eventos.</p>
+    {% endif %}
+</section>
+
 
 {% else %}
     <div class="bg-yellow-50 border border-yellow-200 text-yellow-700 p-4 rounded-lg mb-4">
