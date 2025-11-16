@@ -9,7 +9,8 @@ from .forms import CardForm
 
 @login_required
 def cards_list(request):
-    cards = Card.objects.filter(user=request.user).order_by('fecha_limite_pago')
+    cards = Card.objects.filter(user=request.user)
+    cards = sorted(cards, key=lambda c: c.proxima_fecha_limite_real())
     return render(request, 'cards/cards_list.html', {'cards': cards})
 
 

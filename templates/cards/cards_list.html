@@ -3,25 +3,29 @@
 {% block content %}
 <h1>Mis tarjetas</h1>
 
-<a href="{% url 'card_create' %}">➕ Agregar tarjeta</a>
+<a href="{% url 'card_create' %}" style="font-size: 18px;">➕ Agregar tarjeta</a>
+<hr>
 
 {% if cards %}
-    <ul>
-        {% for card in cards %}
-            <li>
-                <strong>{{ card.banco }} - {{ card.nombre }}</strong><br>
-                Límite: {{ card.limite_credito }} |
-                Saldo: {{ card.saldo_actual }}<br>
-                Corte: día {{ card.fecha_corte }} |
-                Pago límite: día {{ card.fecha_limite_pago }}<br>
-                Color: {{ card.color }}
-                <br>
-                <a href="{% url 'card_update' card.pk %}">Editar</a> |
-                <a href="{% url 'card_delete' card.pk %}">Eliminar</a>
-            </li>
-            <hr>
-        {% endfor %}
-    </ul>
+    {% for card in cards %}
+        <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 12px; border-radius: 6px;">
+            
+            <h3 style="margin: 0; color: {{ card.color }}">
+                {{ card.banco }} – {{ card.nombre }}
+            </h3>
+
+            <p style="margin: 4px 0;">
+                <strong>Límite:</strong> ${{ card.limite_credito }}<br>
+                <strong>Saldo:</strong> ${{ card.saldo_actual }}<br>
+                <strong>Fecha de corte:</strong> día {{ card.fecha_corte }}<br>
+                <strong>Pago límite:</strong> día {{ card.fecha_limite_pago }}<br>
+                <strong>Fecha real límite:</strong> {{ card.proxima_fecha_limite_real }}
+            </p>
+
+            <a href="{% url 'card_update' card.pk %}">Editar</a> |
+            <a href="{% url 'card_delete' card.pk %}">Eliminar</a>
+        </div>
+    {% endfor %}
 {% else %}
     <p>No tienes tarjetas registradas aún.</p>
 {% endif %}
