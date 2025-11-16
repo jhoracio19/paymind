@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayMind</title>
+</head>
+<body>
+<nav>
+    {% if user.is_authenticated %}
+        <span>Hola, {{ user.username }}</span>
+        <a href="{% url 'cards_list' %}">Mis tarjetas</a>
+        <a href="{% url 'logout' %}">Cerrar sesión</a>
+    {% else %}
+        <a href="{% url 'login' %}">Iniciar sesión</a>
+        <a href="{% url 'signup' %}">Registrarse</a>
+    {% endif %}
+    <hr>
+</nav>
+
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

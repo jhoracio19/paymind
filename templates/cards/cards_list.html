@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Mis tarjetas</h1>
+
+<a href="{% url 'card_create' %}">➕ Agregar tarjeta</a>
+
+{% if cards %}
+    <ul>
+        {% for card in cards %}
+            <li>
+                <strong>{{ card.banco }} - {{ card.nombre }}</strong><br>
+                Límite: {{ card.limite_credito }} |
+                Saldo: {{ card.saldo_actual }}<br>
+                Corte: día {{ card.fecha_corte }} |
+                Pago límite: día {{ card.fecha_limite_pago }}<br>
+                Color: {{ card.color }}
+                <br>
+                <a href="{% url 'card_update' card.pk %}">Editar</a> |
+                <a href="{% url 'card_delete' card.pk %}">Eliminar</a>
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No tienes tarjetas registradas aún.</p>
+{% endif %}
+{% endblock %}
