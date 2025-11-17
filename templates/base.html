@@ -1,51 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>PayMind</title>
-    <!-- Tailwind CDN para el MVP -->
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    {% load static %}
+
+    <!-- Tailwind generado por django-tailwind -->
+    {% comment %} <link href="{% static 'theme/css/dist/styles.css' %}" rel="stylesheet"> {% endcomment %}
+    <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
+
     <!-- Heroicons -->
     <script src="https://unpkg.com/feather-icons"></script>
-
 </head>
+
 <body class="bg-slate-100 min-h-screen">
     <header class="bg-white shadow-sm">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="{% url 'cards_list' %}" class="text-lg font-semibold text-slate-800">
-                PayMind
-            </a>
-                <nav class="flex items-center gap-4 text-sm">
-                    {% if user.is_authenticated %}
-                        <span class="text-slate-600">
-                            Hola, <span class="font-medium">{{ user.username }}</span>
-                        </span>
-                        <a href="{% url 'cards_list' %}" class="text-slate-600 hover:text-slate-900">
-                            Dashboard
-                        </a>
-                        <a href="{% url 'logout' %}" class="text-red-500 hover:text-red-600 font-medium">
-                            Cerrar sesión
-                        </a>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="text-slate-600 hover:text-slate-900">
-                            Iniciar sesión
-                        </a>
-                        <a href="{% url 'signup' %}" class="text-indigo-600 hover:text-indigo-700 font-medium">
-                            Registrarse
-                        </a>
-                    {% endif %}
-                </nav>
-        </div>
-    </header>
+    <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-y-2">
 
-    <main class="max-w-4xl mx-auto px-4 py-4 md:py-6">
-        {% block content %}
-        {% endblock %}
+        <!-- LOGO -->
+        <a href="{% url 'cards_list' %}" class="text-lg font-semibold text-slate-800 flex-shrink">
+            PayMind
+        </a>
+
+        <!-- USUARIO + LINKS -->
+        <nav class="flex items-center gap-3 text-sm flex-wrap">
+
+            {% if user.is_authenticated %}
+                <span class="text-slate-600 block max-w-[120px] truncate">
+                    Hola, <span class="font-medium">{{ user.username }}</span>
+                </span>
+
+                <a href="{% url 'cards_list' %}"
+                   class="text-slate-600 hover:text-slate-900 whitespace-nowrap">
+                    Dashboard
+                </a>
+
+                <a href="{% url 'logout' %}"
+                   class="text-red-500 hover:text-red-600 font-medium whitespace-nowrap">
+                    Cerrar sesión
+                </a>
+
+            {% else %}
+                <a href="{% url 'login' %}" class="text-slate-600 hover:text-slate-900">
+                    Iniciar sesión
+                </a>
+                <a href="{% url 'signup' %}" class="text-indigo-600 hover:text-indigo-700 font-medium">
+                    Registrarse
+                </a>
+            {% endif %}
+
+        </nav>
+    </div>
+</header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
     </main>
 
-    <script>
-    feather.replace();
-    </script>
-
+    <script>feather.replace();</script>
 </body>
 </html>

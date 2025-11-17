@@ -1,14 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Eliminar tarjeta</h1>
+<div class="flex justify-center items-center min-h-[70vh] px-4">
+    <div class="bg-white w-full max-w-sm rounded-xl shadow-sm p-5 sm:p-6">
 
-<p>¿Seguro que quieres eliminar la tarjeta <strong>{{ card.banco }} - {{ card.nombre }}</strong>?</p>
+        <h1 class="text-xl sm:text-2xl font-semibold text-slate-800 text-center mb-4">
+            Eliminar tarjeta
+        </h1>
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Sí, eliminar</button>
-</form>
+        <p class="text-center text-slate-600 text-sm mb-6 leading-relaxed">
+            ¿Seguro que deseas eliminar la tarjeta<br>
+            <span class="font-semibold text-slate-800">{{ card.banco }} - {{ card.nombre }}</span>?
+        </p>
 
-<a href="{% url 'cards_list' %}">Cancelar</a>
+        <form method="post" class="space-y-3">
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-lg font-medium text-sm sm:text-base transition">
+                Sí, eliminar
+            </button>
+
+            <a href="{% url 'cards_list' %}"
+               class="block w-full text-center bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-lg font-medium text-sm sm:text-base transition">
+                Cancelar
+            </a>
+        </form>
+
+    </div>
+</div>
 {% endblock %}

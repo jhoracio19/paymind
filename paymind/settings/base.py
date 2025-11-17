@@ -6,12 +6,14 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
-
-# Paths
+# -------------------------------
+# BASE_DIR correcto — NO moverlo
+# -------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Application definition
+# -------------------------------
+# Tailwind
+# -------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -23,20 +25,31 @@ INSTALLED_APPS = [
     # Apps
     'cards',
     'accounts',
+
+    # Tailwind
+    'tailwind',
+    'theme',
+    
+    'widget_tweaks',
+
 ]
 
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+TAILWIND_APP_NAME = 'theme'
+
+# -------------------------------
+# Static files
+# -------------------------------
+STATIC_URL = '/static/'
+
+# Archivos FUENTE de Tailwind (src)
+STATICFILES_DIRS = [
+    BASE_DIR / 'theme' / 'static_src',
 ]
 
-ROOT_URLCONF = 'paymind.urls'
+# Donde Django colecciona estáticos compilados
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Plantillas
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -53,17 +66,21 @@ TEMPLATES = [
     },
 ]
 
+load_dotenv()
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'paymind.urls'
+
 WSGI_APPLICATION = 'paymind.wsgi.application'
-
-
-# -----------------------------------------------------------------------------------
-# NO DEFINIR AQUÍ:
-# - SECRET_KEY
-# - DEBUG
-# - ALLOWED_HOSTS
-# - DATABASES
-# Eso va solo en dev.py o prod.py
-# -----------------------------------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -79,11 +96,8 @@ USE_I18N = True
 USE_TZ = True
 USE_L10N = True
 
-STATIC_URL = 'static/'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Login/Logout redirects
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'cards_list'
 LOGOUT_REDIRECT_URL = 'login'
