@@ -4,10 +4,9 @@ import dj_database_url
 
 DEBUG = False
 
-SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-# ⚠️ Para ponerlo a funcionar YA: aceptamos cualquier host en prod
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["paymind.onrender.com"]
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -16,3 +15,8 @@ DATABASES = {
         ssl_require=True,
     )
 }
+
+# Archivos estáticos en producción
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = []   # ← MUY IMPORTANTE
