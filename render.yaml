@@ -5,6 +5,7 @@ services:
     plan: free
     buildCommand: |
       pip install -r requirements.txt
+      python manage.py tailwind build   # COMPILA TAILWIND EN PRODUCCIÓN
       python manage.py collectstatic --noinput
     startCommand: gunicorn paymind.wsgi:application
     envVars:
