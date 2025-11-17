@@ -19,4 +19,13 @@ DATABASES = {
 # Archivos estáticos en producción
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = []   # ← MUY IMPORTANTE
+STATICFILES_DIRS = []   # ← MUY IMPORTANTE: vacío en producción
+
+# WhiteNoise para servir archivos estáticos en producción
+# Debe ir DESPUÉS de SecurityMiddleware pero ANTES de otros middlewares
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+
+# Configuración de WhiteNoise
+# Usamos CompressedStaticFilesStorage (sin manifest) porque django-tailwind
+# genera nombres fijos sin hash
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'

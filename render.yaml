@@ -9,6 +9,8 @@ services:
       python manage.py collectstatic --noinput
     startCommand: gunicorn paymind.wsgi:application
     envVars:
+      - key: DJANGO_ENV
+        value: "prod"
       - key: DJANGO_ALLOWED_HOSTS
         value: "paymind.onrender.com"
       - key: DEBUG
