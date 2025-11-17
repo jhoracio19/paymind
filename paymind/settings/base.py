@@ -44,6 +44,7 @@ STATIC_URL = '/static/'
 # Archivos FUENTE de Tailwind (src)
 STATICFILES_DIRS = [
     BASE_DIR / 'theme' / 'static_src',
+    BASE_DIR / 'theme' / 'static',
 ]
 
 # Donde Django colecciona estáticos compilados
