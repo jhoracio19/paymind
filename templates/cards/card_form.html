@@ -1,45 +1,175 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
 
 <div class="max-w-xl mx-auto">
-
-    <h1 class="text-2xl font-bold text-slate-800 mb-6">
+    <!-- Título -->
+    <h1 class="text-2xl font-bold text-slate-900 mb-4 text-left">
         {{ title }}
     </h1>
 
-    <form method="post" class="space-y-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        {% csrf_token %}
+    <!-- Contenedor principal, pensado primero para móvil -->
+    <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-5 sm:p-6 space-y-5">
 
-{% for field in form %}
-    <div class="space-y-1">
-        <label class="block text-sm font-medium text-slate-700">
-            {{ field.label }}
-        </label>
-        {{ field }}
-        {% if field.help_text %}
-            <p class="text-xs text-slate-400">{{ field.help_text }}</p>
-        {% endif %}
-        {% if field.errors %}
-            <p class="text-xs text-red-500">
-                {{ field.errors }}
-            </p>
-        {% endif %}
-    </div>
-{% endfor %}
-        <div class="flex items-center justify-end gap-3 pt-4">
-            <a href="{% url 'cards_list' %}"
-               class="px-4 py-2 rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 text-sm">
-                Cancelar
-            </a>
+        <!-- Vista previa de la tarjeta -->
+        <div class="flex justify-center">
+            <div id="card-preview"
+                 class="w-full max-w-sm rounded-2xl p-4 sm:p-5 text-white shadow-lg transition-all duration-200"
+                 style="background: #4F46E5;">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <p class="text-xs uppercase tracking-wide text-slate-100/80">Banco</p>
+                        <p id="preview-banco" class="text-base font-semibold">
+                            {{ form.banco.value|default:"Nombre del banco" }}
+                        </p>
+                    </div>
+                    <span class="text-xs bg-white/20 px-2 py-1 rounded-full backdrop-blur">
+                        PayMind
+                    </span>
+                </div>
 
-            <button type="submit"
-                    class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm">
-                Guardar
-            </button>
+                <div class="mb-4">
+                    <p class="text-[11px] uppercase tracking-wide text-slate-100/80">Nombre en la tarjeta</p>
+                    <p id="preview-nombre" class="text-sm font-medium">
+                        {{ form.nombre.value|default:"Nombre de la tarjeta" }}
+                    </p>
+                </div>
+
+                <div class="flex items-end justify-between text-[11px] text-slate-100/80">
+                    <div>
+                        <p class="uppercase tracking-wide">Límite</p>
+                        <p id="preview-limite" class="text-sm font-semibold">
+                            {% if form.limite_credito.value %}
+                                ${{ form.limite_credito.value }}
+                            {% else %}
+                                $0.00
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p class="uppercase tracking-wide">Día de corte</p>
+                        <p id="preview-diacorte" class="text-sm font-semibold">
+                            {{ form.dia_corte.value|default:"--" }}
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>
 
+        <!-- Formulario -->
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    <p class="font-semibold mb-1">
+                        Revisa los datos de la tarjeta:
+                    </p>
+                    <ul class="list-disc pl-5 space-y-0.5">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><span class="font-medium">{{ field.label }}:</span> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                {% if field.name == "color" %}
+                    <!-- Campo de color, con patrón especial para que sea claro en móvil -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-slate-700">
+                            Color de la tarjeta
+                        </label>
+                        <div class="flex items-center gap-3">
+                            {{ field }}
+                            <span class="text-xs text-slate-500">
+                                Toca para elegir un color
+                            </span>
+                        </div>
+                        {% if field.errors %}
+                            <p class="text-xs text-red-500">
+                                {{ field.errors }}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-slate-700">
+                            {{ field.label }}
+                        </label>
+                        {{ field|add_class:"w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" }}
+                        {% if field.help_text %}
+                            <p class="text-xs text-slate-400">{{ field.help_text }}</p>
+                        {% endif %}
+                        {% if field.errors %}
+                            <p class="text-xs text-red-500">
+                                {{ field.errors }}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Botones de acción -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-2">
+                <a href="{% url 'cards_list' %}"
+                   class="w-full sm:w-auto inline-flex justify-center px-4 py-2.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm font-medium transition-colors">
+                    Cancelar
+                </a>
+
+                <button type="submit"
+                        class="w-full sm:w-auto inline-flex justify-center px-4 py-2.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-semibold shadow-sm transition-colors">
+                    Guardar tarjeta
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<!-- Script ligero para sincronizar el color y algunos textos de la vista previa -->
+<script>
+    (function () {
+        const colorInput = document.querySelector('input[name="color"]');
+        const cardPreview = document.getElementById('card-preview');
+
+        const bancoInput = document.querySelector('input[name="banco"]');
+        const nombreInput = document.querySelector('input[name="nombre"]');
+        const limiteInput = document.querySelector('input[name="limite_credito"]');
+        const diaCorteInput = document.querySelector('input[name="dia_corte"]');
+
+        const bancoText = document.getElementById('preview-banco');
+        const nombreText = document.getElementById('preview-nombre');
+        const limiteText = document.getElementById('preview-limite');
+        const diaCorteText = document.getElementById('preview-diacorte');
+
+        if (colorInput && cardPreview) {
+            const applyColor = (value) => {
+                if (!value) return;
+                cardPreview.style.background = value;
+            };
+            applyColor(colorInput.value);
+            colorInput.addEventListener('input', (e) => applyColor(e.target.value));
+        }
+
+        const bindText = (input, target, formatter) => {
+            if (!input || !target) return;
+            input.addEventListener('input', () => {
+                const v = input.value;
+                target.textContent = formatter ? formatter(v) : (v || target.dataset.placeholder || target.textContent);
+            });
+        };
+
+        bindText(bancoInput, bancoText);
+        bindText(nombreInput, nombreText);
+        bindText(limiteInput, limiteText, (v) => v ? `$${v}` : '$0.00');
+        bindText(diaCorteInput, diaCorteText, (v) => v || '--');
+    })();
+</script>
 
 {% endblock %}

@@ -12,26 +12,50 @@ BASE_INPUT_CLASSES = (
 class CardForm(forms.ModelForm):
     class Meta:
         model = Card
-        exclude = ['user', 'created_at']
+        # puedes seguir usando exclude, 'activa' no la exponemos en el formulario
+        exclude = ['user', 'created_at', 'activa']
         widgets = {
             'banco': forms.TextInput(attrs={'class': BASE_INPUT_CLASSES}),
             'nombre': forms.TextInput(attrs={'class': BASE_INPUT_CLASSES}),
-            'limite_credito': forms.NumberInput(attrs={'class': BASE_INPUT_CLASSES, 'step': '0.01'}),
-            'saldo_actual': forms.NumberInput(attrs={'class': BASE_INPUT_CLASSES, 'step': '0.01'}),
-            'fecha_corte': forms.NumberInput(attrs={'class': BASE_INPUT_CLASSES, 'min': 1, 'max': 31}),
-            'fecha_limite_pago': forms.NumberInput(attrs={'class': BASE_INPUT_CLASSES, 'min': 1, 'max': 31}),
-            'anualidad': forms.NumberInput(attrs={'class': BASE_INPUT_CLASSES, 'step': '0.01'}),
-            'color': forms.TextInput(attrs={'class': BASE_INPUT_CLASSES, 'placeholder': '#FFD700'}),
+            'limite_credito': forms.NumberInput(attrs={
+                'class': BASE_INPUT_CLASSES,
+                'step': '0.01'
+            }),
+            'saldo_actual': forms.NumberInput(attrs={
+                'class': BASE_INPUT_CLASSES,
+                'step': '0.01'
+            }),
+            # OJO: aquí ya son dia_corte / dia_limite_pago
+            'dia_corte': forms.NumberInput(attrs={
+                'class': BASE_INPUT_CLASSES,
+                'min': 1,
+                'max': 31,
+            }),
+            'dia_limite_pago': forms.NumberInput(attrs={
+                'class': BASE_INPUT_CLASSES,
+                'min': 1,
+                'max': 31,
+            }),
+            'anualidad': forms.NumberInput(attrs={
+                'class': BASE_INPUT_CLASSES,
+                'step': '0.01'
+            }),
+            'color': forms.TextInput(attrs={
+                'class': BASE_INPUT_CLASSES,
+                'placeholder': '#FFD700'
+            }),
         }
 
-    def clean_fecha_corte(self):
-        dia = self.cleaned_data['fecha_corte']
+    # ======= VALIDACIONES CORRECTAS (con nombres nuevos) =======
+
+    def clean_dia_corte(self):
+        dia = self.cleaned_data['dia_corte']
         if dia < 1 or dia > 31:
             raise forms.ValidationError("El día de corte debe estar entre 1 y 31.")
         return dia
 
-    def clean_fecha_limite_pago(self):
-        dia = self.cleaned_data['fecha_limite_pago']
+    def clean_dia_limite_pago(self):
+        dia = self.cleaned_data['dia_limite_pago']
         if dia < 1 or dia > 31:
             raise forms.ValidationError("El día de pago debe estar entre 1 y 31.")
         return dia

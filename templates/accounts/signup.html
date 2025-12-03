@@ -5,37 +5,68 @@
 {% block content %}
 <div class="flex justify-center items-center min-h-screen px-4">
 
-    <div class="bg-white w-full max-w-sm rounded-xl shadow-sm p-5 sm:p-6">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-md border border-slate-100 p-8">
 
-        <h1 class="text-xl sm:text-2xl font-semibold text-slate-800 text-center mb-5">
+        <h1 class="text-2xl font-semibold text-slate-900 text-center mb-6">
             Crear cuenta
         </h1>
+
+        {% if form.errors %}
+            <div class="mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <p class="font-semibold mb-1">
+                    Revisa los siguientes campos:
+                </p>
+                <ul class="list-disc pl-5 space-y-0.5">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><span class="font-medium">{{ field.label }}:</span> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
 
         <form method="post" class="space-y-4">
             {% csrf_token %}
 
-            {{ form.non_field_errors }}
-
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">Usuario</label>
-                {{ form.username }}
+                {{ form.username|add_class:"w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" }}
+                {% if form.username.errors %}
+                    <p class="mt-1 text-xs text-red-500">
+                        {{ form.username.errors|striptags }}
+                    </p>
+                {% endif %}
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">Contraseña</label>
-                {{ form.password1 }}
+                {{ form.password1|add_class:"w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" }}
                 <p class="text-xs text-slate-500 mt-1 leading-relaxed">
                     Debe tener mínimo 8 caracteres, no ser común, y no ser similar a tus datos.
                 </p>
+                {% if form.password1.errors %}
+                    <p class="mt-1 text-xs text-red-500">
+                        {{ form.password1.errors|striptags }}
+                    </p>
+                {% endif %}
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">Confirmar contraseña</label>
-                {{ form.password2 }}
+                {{ form.password2|add_class:"w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" }}
+                {% if form.password2.errors %}
+                    <p class="mt-1 text-xs text-red-500">
+                        {{ form.password2.errors|striptags }}
+                    </p>
+                {% endif %}
             </div>
 
             <button
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-lg font-medium text-sm sm:text-base transition">
+                class="w-full rounded-xl bg-indigo-600 text-white py-2.5 font-medium hover:bg-indigo-700 transition">
                 Registrarme
             </button>
         </form>

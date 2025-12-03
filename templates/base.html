@@ -19,7 +19,7 @@
 
 <body class="bg-slate-100 min-h-screen">
     <header class="bg-white shadow-sm">
-    <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-y-2">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-y-2">
 
         <!-- LOGO -->
         <a href="{% url 'cards_list' %}" class="text-lg font-semibold text-slate-800 flex-shrink">
@@ -39,6 +39,11 @@
                     Dashboard
                 </a>
 
+                <a href="{% url 'info_tdc' %}" class="text-sm text-slate-600 hover:text-slate-900">
+                    Información de TDC
+                </a>
+
+
                 <a href="{% url 'logout' %}"
                    class="text-red-500 hover:text-red-600 font-medium whitespace-nowrap">
                     Cerrar sesión
@@ -57,7 +62,7 @@
     </div>
 </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-6">
+    <main class="max-w-5xl mx-auto px-4 py-8 md:py-10">
         {% block content %}{% endblock %}
     </main>
 
