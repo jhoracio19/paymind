@@ -81,17 +81,56 @@
 
             {% for field in form %}
                 {% if field.name == "color" %}
-                    <!-- Campo de color, con patrón especial para que sea claro en móvil -->
-                    <div class="space-y-2">
+                    <!-- Campo de color con paleta visual -->
+                    <div class="space-y-3">
                         <label class="block text-sm font-medium text-slate-700">
                             Color de la tarjeta
                         </label>
-                        <div class="flex items-center gap-3">
-                            {{ field }}
-                            <span class="text-xs text-slate-500">
-                                Toca para elegir un color
-                            </span>
+                        
+                        <!-- Paleta de colores predefinidos -->
+                        <div class="space-y-2">
+                            <p class="text-xs text-slate-500 mb-2">Colores sugeridos:</p>
+                            <div class="grid grid-cols-8 sm:grid-cols-10 gap-2" id="color-palette">
+                                <!-- Colores predefinidos comunes para tarjetas -->
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#4F46E5" style="background-color: #4F46E5;" title="Azul índigo"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#EF4444" style="background-color: #EF4444;" title="Rojo"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#10B981" style="background-color: #10B981;" title="Verde"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#F59E0B" style="background-color: #F59E0B;" title="Ámbar"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#8B5CF6" style="background-color: #8B5CF6;" title="Púrpura"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#EC4899" style="background-color: #EC4899;" title="Rosa"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#06B6D4" style="background-color: #06B6D4;" title="Cian"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#F97316" style="background-color: #F97316;" title="Naranja"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#84CC16" style="background-color: #84CC16;" title="Lima"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#6366F1" style="background-color: #6366F1;" title="Índigo"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#DC2626" style="background-color: #DC2626;" title="Rojo oscuro"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#059669" style="background-color: #059669;" title="Verde esmeralda"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#D97706" style="background-color: #D97706;" title="Ámbar oscuro"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#7C3AED" style="background-color: #7C3AED;" title="Violeta"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#DB2777" style="background-color: #DB2777;" title="Rosa fucsia"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#0891B2" style="background-color: #0891B2;" title="Cian oscuro"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#EA580C" style="background-color: #EA580C;" title="Naranja oscuro"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#65A30D" style="background-color: #65A30D;" title="Lima oscuro"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#1E40AF" style="background-color: #1E40AF;" title="Azul"></button>
+                                <button type="button" class="color-option w-10 h-10 rounded-lg border-2 border-slate-200 hover:border-indigo-500 hover:scale-110 transition-all cursor-pointer" data-color="#991B1B" style="background-color: #991B1B;" title="Rojo muy oscuro"></button>
+                            </div>
                         </div>
+                        
+                        <!-- Selector de color personalizado -->
+                        <div class="flex items-center gap-3">
+                            <div class="flex-1">
+                                <p class="text-xs text-slate-500 mb-2">O elige un color personalizado:</p>
+                                <div class="flex items-center gap-3">
+                                    {{ field|add_class:"w-20 h-12 rounded-lg border-2 border-slate-300 cursor-pointer" }}
+                                    <div class="flex-1">
+                                        <input type="text" id="color-hex-display" readonly 
+                                               class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm bg-slate-50 text-slate-700 font-mono"
+                                               placeholder="#000000">
+                                        <p class="text-xs text-slate-400 mt-1">Código HEX del color seleccionado</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         {% if field.errors %}
                             <p class="text-xs text-red-500">
                                 {{ field.errors }}
@@ -132,11 +171,13 @@
     </div>
 </div>
 
-<!-- Script ligero para sincronizar el color y algunos textos de la vista previa -->
+<!-- Script para sincronizar el color, paleta y vista previa -->
 <script>
     (function () {
         const colorInput = document.querySelector('input[name="color"]');
+        const colorHexDisplay = document.getElementById('color-hex-display');
         const cardPreview = document.getElementById('card-preview');
+        const colorOptions = document.querySelectorAll('.color-option');
 
         const bancoInput = document.querySelector('input[name="banco"]');
         const nombreInput = document.querySelector('input[name="nombre"]');
@@ -148,15 +189,63 @@
         const limiteText = document.getElementById('preview-limite');
         const diaCorteText = document.getElementById('preview-diacorte');
 
-        if (colorInput && cardPreview) {
-            const applyColor = (value) => {
-                if (!value) return;
-                cardPreview.style.background = value;
-            };
-            applyColor(colorInput.value);
-            colorInput.addEventListener('input', (e) => applyColor(e.target.value));
+        // Función para actualizar el color en todos los lugares
+        const updateColor = (colorValue) => {
+            if (!colorValue) return;
+            
+            // Actualizar el input de color
+            if (colorInput) {
+                colorInput.value = colorValue;
+            }
+            
+            // Actualizar el display del código HEX
+            if (colorHexDisplay) {
+                colorHexDisplay.value = colorValue.toUpperCase();
+            }
+            
+            // Actualizar la vista previa de la tarjeta
+            if (cardPreview) {
+                cardPreview.style.background = colorValue;
+            }
+            
+            // Actualizar el estado visual de los botones de la paleta
+            colorOptions.forEach(btn => {
+                const btnColor = btn.dataset.color;
+                if (btnColor && btnColor.toUpperCase() === colorValue.toUpperCase()) {
+                    btn.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-2');
+                    btn.classList.remove('border-slate-200');
+                    btn.style.borderColor = '#6366F1';
+                } else {
+                    btn.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2');
+                    btn.classList.add('border-slate-200');
+                    btn.style.borderColor = '';
+                }
+            });
+        };
+
+        // Inicializar con el valor por defecto o el valor existente
+        if (colorInput) {
+            const initialColor = colorInput.value || '#4F46E5';
+            updateColor(initialColor);
+            
+            // Escuchar cambios en el selector de color nativo
+            colorInput.addEventListener('input', (e) => {
+                updateColor(e.target.value);
+            });
         }
 
+        // Manejar clics en los botones de la paleta
+        colorOptions.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const selectedColor = btn.dataset.color;
+                if (selectedColor) {
+                    updateColor(selectedColor);
+                }
+            });
+        });
+
+        // Sincronizar textos de la vista previa
         const bindText = (input, target, formatter) => {
             if (!input || !target) return;
             input.addEventListener('input', () => {

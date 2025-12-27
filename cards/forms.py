@@ -42,7 +42,9 @@ class CardForm(forms.ModelForm):
             }),
             'color': forms.TextInput(attrs={
                 'class': BASE_INPUT_CLASSES,
-                'placeholder': '#FFD700'
+                'type': 'color',
+                'style': 'height: 50px; cursor: pointer;',
+                'value': '#4F46E5'
             }),
         }
 

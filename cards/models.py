@@ -69,3 +69,23 @@ class Card(models.Model):
 
     def __str__(self):
         return f"{self.banco} - {self.nombre}"
+
+
+class PaymentHistory(models.Model):
+    """Historial de pagos mensuales de las tarjetas"""
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='payment_history')
+    fecha_pago = models.DateField(help_text="Fecha límite de pago del periodo")
+    saldo_pagado = models.DecimalField(max_digits=10, decimal_places=2, help_text="Saldo que tenía la tarjeta en ese periodo")
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, default=0, help_text="Monto que se pagó")
+    pagado = models.BooleanField(default=False, help_text="Indica si el pago fue completado")
+    fecha_pagado = models.DateTimeField(null=True, blank=True, help_text="Fecha y hora en que se marcó como pagado")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-fecha_pago', '-created_at']
+        verbose_name = "Historial de pago"
+        verbose_name_plural = "Historial de pagos"
+
+    def __str__(self):
+        return f"{self.card.banco} - {self.card.nombre} - {self.fecha_pago} - {'Pagado' if self.pagado else 'Pendiente'}"

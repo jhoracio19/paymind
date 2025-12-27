@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8" />
     <title>PayMind</title>
@@ -15,14 +15,21 @@
 
     <!-- Heroicons -->
     <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- CSRF Token para AJAX -->
+    {% csrf_token %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 
-<body class="bg-slate-100 min-h-screen">
-    <header class="bg-white shadow-sm">
+<body class="bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen transition-colors">
+    <header class="bg-white dark:bg-slate-900 shadow-sm transition-colors">
     <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-y-2">
 
         <!-- LOGO -->
-        <a href="{% url 'cards_list' %}" class="text-lg font-semibold text-slate-800 flex-shrink">
+        <a href="{% url 'cards_list' %}" class="text-lg font-semibold text-slate-800 dark:text-slate-100 flex-shrink">
             PayMind
         </a>
 
@@ -30,32 +37,40 @@
         <nav class="flex items-center gap-3 text-sm flex-wrap">
 
             {% if user.is_authenticated %}
-                <span class="text-slate-600 block max-w-[120px] truncate">
+                <span class="text-slate-600 dark:text-slate-300 block max-w-[120px] truncate">
                     Hola, <span class="font-medium">{{ user.username }}</span>
                 </span>
 
                 <a href="{% url 'cards_list' %}"
-                   class="text-slate-600 hover:text-slate-900 whitespace-nowrap">
+                   class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-50 whitespace-nowrap">
                     Dashboard
                 </a>
 
-                <a href="{% url 'info_tdc' %}" class="text-sm text-slate-600 hover:text-slate-900">
+                <a href="{% url 'payment_history' %}" class="text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-50">
+                    Historial
+                </a>
+
+                <a href="{% url 'info_tdc' %}" class="text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-50">
                     Información de TDC
                 </a>
 
 
                 <a href="{% url 'logout' %}"
-                   class="text-red-500 hover:text-red-600 font-medium whitespace-nowrap">
+                   class="text-red-500 hover:text-red-400 font-medium whitespace-nowrap">
                     Cerrar sesión
                 </a>
 
             {% else %}
-                <a href="{% url 'login' %}" class="text-slate-600 hover:text-slate-900">
+                <a href="{% url 'login' %}" class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-50">
                     Iniciar sesión
                 </a>
                 <a href="{% url 'signup' %}" class="text-indigo-600 hover:text-indigo-700 font-medium">
                     Registrarse
                 </a>
+                <button id="theme-toggle"
+                        class="ml-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    Modo oscuro
+                </button>
             {% endif %}
 
         </nav>
@@ -66,6 +81,35 @@
         {% block content %}{% endblock %}
     </main>
 
-    <script>feather.replace();</script>
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const stored = localStorage.getItem('theme');
+            if (stored === 'dark' || (!stored && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                root.classList.add('dark');
+            }
+
+            const btn = document.getElementById('theme-toggle');
+            if (!btn) {
+                feather.replace();
+                return;
+            }
+
+            const updateLabel = () => {
+                const isDark = root.classList.contains('dark');
+                btn.textContent = isDark ? 'Modo claro' : 'Modo oscuro';
+            };
+
+            updateLabel();
+
+            btn.addEventListener('click', () => {
+                const isDark = root.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                updateLabel();
+            });
+
+            feather.replace();
+        })();
+    </script>
 </body>
 </html>

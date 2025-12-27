@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+    <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
+            Historial de Pagos
+        </h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400">
+            Registro completo de todos tus pagos realizados
+        </p>
+    </div>
+    <a href="{% url 'cards_list' %}"
+       class="inline-flex items-center justify-center gap-2 text-sm px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition-colors">
+        <span>←</span>
+        <span>Volver al Dashboard</span>
+    </a>
+</div>
+
+{% if historial %}
+    {% for mes_key, pagos_mes in historial_por_mes.items %}
+    <section class="mb-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-4 sm:p-6 transition-all duration-300 hover:shadow-xl">
+            <div class="mb-4 pb-3 border-b border-slate-200 dark:border-slate-700">
+                <h2 class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100">
+                    {{ pagos_mes.0.fecha_pago|date:"F Y"|capfirst }}
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    {{ pagos_mes|length }} pago{{ pagos_mes|length|pluralize }} registrado{{ pagos_mes|length|pluralize }}
+                </p>
+            </div>
+            
+            <div class="space-y-3">
+                {% for pago in pagos_mes %}
+                <div class="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-700/50 dark:to-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-600 p-4 hover:shadow-md transition-all duration-200">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="inline-block w-2 h-10 rounded-full" style="background-color: {{ pago.card.color }}"></span>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-slate-900 dark:text-slate-100 text-base">
+                                        {{ pago.card.banco }} – {{ pago.card.nombre }}
+                                    </p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                        Fecha límite: {{ pago.fecha_pago|date:"j \\d\\e F \\d\\e Y" }}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="ml-5 grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                                <div>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">
+                                        Saldo del periodo
+                                    </p>
+                                    <p class="text-lg font-bold text-slate-700 dark:text-slate-300">
+                                        ${{ pago.saldo_pagado|floatformat:2 }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">
+                                        Monto pagado
+                                    </p>
+                                    <p class="text-lg font-bold {% if pago.pagado %}text-green-600 dark:text-green-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                                        ${{ pago.monto_pagado|floatformat:2 }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-shrink-0">
+                            {% if pago.pagado %}
+                            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-100 dark:bg-green-900/50 border border-green-300 dark:border-green-700">
+                                <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-semibold text-green-700 dark:text-green-400 text-sm">
+                                    Pagado
+                                </span>
+                            </div>
+                            {% if pago.fecha_pagado %}
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 text-center">
+                                {{ pago.fecha_pagado|date:"j M Y, H:i" }}
+                            </p>
+                            {% endif %}
+                            {% else %}
+                            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100 dark:bg-amber-900/50 border border-amber-300 dark:border-amber-700">
+                                <span class="font-semibold text-amber-700 dark:text-amber-400 text-sm">
+                                    Pendiente
+                                </span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endfor %}
+    
+    <!-- Resumen del historial -->
+    <section class="mb-6">
+        <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl border border-indigo-200 dark:border-indigo-800/50 p-4 sm:p-6">
+            <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4">
+                Resumen del Historial
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">
+                        Total de registros
+                    </p>
+                    <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                        {{ total_registros }}
+                    </p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">
+                        Pagos completados
+                    </p>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">
+                        {{ pagos_completados }}
+                    </p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">
+                        Total pagado
+                    </p>
+                    <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                        ${{ total_pagado|floatformat:2 }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% else %}
+    <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-8 text-center">
+        <div class="max-w-md mx-auto">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+                <svg class="w-8 h-8 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                Aún no hay historial de pagos
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Cuando marques pagos como completados en el dashboard, aparecerán aquí.
+            </p>
+            <a href="{% url 'cards_list' %}"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium transition-colors">
+                <span>←</span>
+                <span>Volver al Dashboard</span>
+            </a>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}
+
